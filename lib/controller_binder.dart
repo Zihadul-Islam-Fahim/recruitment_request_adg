@@ -1,0 +1,19 @@
+import 'package:get/get.dart';
+import 'package:recruitment_request_adg/presentation/controllers/auth_controller.dart';
+import 'package:recruitment_request_adg/presentation/controllers/login_controller.dart';
+
+import 'package:recruitment_request_adg/presentation/controllers/signup_controller.dart';
+
+
+class ControllerBinder extends Bindings {
+  @override
+  void dependencies() {
+
+    Get.put(AuthController());
+    Get.put(LoginController());
+    Get.put(SignupController());
+
+
+
+  }
+}

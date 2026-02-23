@@ -1,0 +1,1 @@
+enum RequestStatus { newRequest, inProgress, fulfilled, closed }
