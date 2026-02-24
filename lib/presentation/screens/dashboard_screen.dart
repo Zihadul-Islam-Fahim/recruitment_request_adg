@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:recruitment_request_adg/data/models/job_post_list_model.dart';
+import 'package:recruitment_request_adg/presentation/controllers/dashboard_controller.dart';
 
 import '../../data/models/recruitment_request_model.dart';
 import '../../data/models/request_status.dart';
 import '../controllers/adg_controller.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  void initState() {
+    Get.find<DashboardController>().getPosts();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +36,10 @@ class DashboardScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: GetBuilder<ADGController>(
+        child: GetBuilder<DashboardController>(
           builder: (ctl) {
-            final items = ctl.requests;
+            if(ctl.inProgress==false){
+            final items = ctl.jobPostListModel?.jobPostList ?? [];
             if (items.isEmpty) {
               return Center(child: Text('No requests yet. Tap + to create one.'));
             }
@@ -37,6 +51,9 @@ class DashboardScreen extends StatelessWidget {
                 return _RequestListItem(request: r);
               },
             );
+            }else{
+              return Center(child: CircularProgressIndicator(),);
+            }
           },
         ),
       ),
@@ -45,12 +62,13 @@ class DashboardScreen extends StatelessWidget {
 }
 
 class _RequestListItem extends StatelessWidget {
-  final RecruitmentRequest request;
+
+  final JobPosts request;
   const _RequestListItem({required this.request});
 
   @override
   Widget build(BuildContext context) {
-    final created = '${request.createdAt.year}-${request.createdAt.month.toString().padLeft(2, '0')}-${request.createdAt.day.toString().padLeft(2, '0')}';
+    final created = request.createdAt;
     return InkWell(
       onTap: () => Get.toNamed('/detail/${request.id}'),
       borderRadius: BorderRadius.circular(12),
@@ -62,19 +80,19 @@ class _RequestListItem extends StatelessWidget {
           Container(
             width: 8,
             height: 56,
-            decoration: BoxDecoration(color: _statusColor(request.status), borderRadius: BorderRadius.circular(6)),
+            decoration: BoxDecoration(color: Colors.indigo.shade300, borderRadius: BorderRadius.circular(6)),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
-                Expanded(child: Text(request.position, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600))),
-                _smallStatusBadge(request.status),
+                Expanded(child: Text(request.jobTitle ?? "", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600))),
+                //_smallStatusBadge(request.status),
               ]),
               const SizedBox(height: 6),
-              Text('${request.clientName} • ${request.quantity} needed', style: TextStyle(color: Colors.grey.shade700)),
+              Text('${request.jobTitle} • ${request.vacancyCount} needed', style: TextStyle(color: Colors.grey.shade700)),
               const SizedBox(height: 6),
-              Text('Salary: ${request.salaryRange} • Urgency: ${request.urgency} • $created', style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
+              Text('Salary: ${request.salaryMin} - ${request.salaryMax} • Urgency: ${request.urgency} • $created', style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
             ]),
           ),
         ]),
@@ -82,18 +100,18 @@ class _RequestListItem extends StatelessWidget {
     );
   }
 
-  Color _statusColor(RequestStatus s) {
-    switch (s) {
-      case RequestStatus.newRequest:
-        return Colors.indigo.shade300;
-      case RequestStatus.inProgress:
-        return Colors.orange.shade300;
-      case RequestStatus.fulfilled:
-        return Colors.green.shade300;
-      case RequestStatus.closed:
-        return Colors.grey.shade400;
-    }
-  }
+  // Color _statusColor(RequestStatus s) {
+  //   switch (s) {
+  //     case RequestStatus.newRequest:
+  //       return Colors.indigo.shade300;
+  //     case RequestStatus.inProgress:
+  //       return Colors.orange.shade300;
+  //     case RequestStatus.fulfilled:
+  //       return Colors.green.shade300;
+  //     case RequestStatus.closed:
+  //       return Colors.grey.shade400;
+  //   }
+  // }
 
   Widget _smallStatusBadge(RequestStatus s) {
     String label;
