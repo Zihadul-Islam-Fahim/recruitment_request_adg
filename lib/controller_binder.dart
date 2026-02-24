@@ -3,6 +3,7 @@ import 'package:recruitment_request_adg/presentation/controllers/Splash%20Contro
 import 'package:recruitment_request_adg/presentation/controllers/auth_controller.dart';
 import 'package:recruitment_request_adg/presentation/controllers/dashboard_controller.dart';
 import 'package:recruitment_request_adg/presentation/controllers/login_controller.dart';
+import 'package:recruitment_request_adg/presentation/controllers/request_controller.dart';
 
 import 'package:recruitment_request_adg/presentation/controllers/signup_controller.dart';
 
@@ -15,6 +16,7 @@ class ControllerBinder extends Bindings {
     Get.put(LoginController());
     Get.put(SignupController());
     Get.put(DashboardController());
+    Get.put(RequestController());
 
 
 
