@@ -7,6 +7,7 @@ import 'package:recruitment_request_adg/presentation/screens/login_screen.dart';
 import 'package:recruitment_request_adg/presentation/screens/new_request_screen.dart';
 import 'package:recruitment_request_adg/presentation/screens/register_screen.dart';
 import 'package:recruitment_request_adg/presentation/screens/request_details_screen.dart';
+import 'package:recruitment_request_adg/presentation/screens/splash_screen.dart';
 
 import 'controller_binder.dart';
 
@@ -27,7 +28,8 @@ class ADGApp extends StatelessWidget {
       initialBinding: ControllerBinder(),
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => const LoginScreen()),
+        GetPage(name: '/', page: () =>  SplashScreen()),
+        GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/dashboard', page: () => const DashboardScreen()),
         GetPage(name: '/register', page: () =>  RegisterScreen()),
         GetPage(name: '/new_request', page: () => const NewRequestScreen()),
