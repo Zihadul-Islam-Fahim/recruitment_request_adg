@@ -9,7 +9,7 @@ import '../../data/utils/urls.dart';
 
 class DashboardController extends GetxController{
   bool inProgress = false;
-  late final JobPostListModel? jobPostListModel;
+   JobPostListModel? jobPostListModel;
 
   Future<void> getPosts ()async{
     inProgress = true;

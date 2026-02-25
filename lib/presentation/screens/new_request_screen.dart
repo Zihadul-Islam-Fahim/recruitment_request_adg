@@ -15,12 +15,11 @@ class NewRequestScreen extends StatefulWidget {
 
 class _NewRequestScreenState extends State<NewRequestScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _jobType = TextEditingController();
   final _vacancyCount = TextEditingController();
   final _clientPhone = TextEditingController();
   final _positionCtrl = TextEditingController();
   final _jobDescCtrl = TextEditingController();
-  final _salaryMin = TextEditingController(text: '1');
+  final _salaryMin = TextEditingController();
   final _salaryMax = TextEditingController();
   final _email = TextEditingController();
   // final _salaryType = TextEditingController();
@@ -28,6 +27,14 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
   final _jobLocation = TextEditingController();
   String _urgency = 'medium';
   String? _selectedPosition;
+  String? _selectedJobType;
+
+  final List<String> commonJobTypes = [
+    'full-time',
+    'part-time',
+    'contract',
+    'remote',
+  ];
 
 
   // sample common positions (could come from backend)
@@ -43,7 +50,6 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
 
   @override
   void dispose() {
-    _jobType.dispose();
     _vacancyCount.dispose();
     _clientPhone.dispose();
     _positionCtrl.dispose();
@@ -61,7 +67,7 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
 
    bool res = await Get.find<RequestController>().sendInfo(
         jobTitle: position ?? "",
-        jobType: _jobType.text,
+        jobType: _selectedJobType ?? "full-time",
         vacancyCount: _vacancyCount.text,
         urgency: _urgency,
         salaryMin: _salaryMin.text,
@@ -96,6 +102,8 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
                   value: _selectedPosition,
+                  borderRadius: BorderRadius.circular(20),
+                  dropdownColor: Colors.white,
                   items: [null, ...commonPositions].map((p) {
                     if (p == null) return const DropdownMenuItem<String>(value: null, child: Text('Select or type new position'));
                     return DropdownMenuItem<String>(value: p, child: Text(p));
@@ -107,7 +115,19 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                 TextFormField(controller: _positionCtrl, decoration: const InputDecoration(labelText: 'Or enter position manually (overrides)')),
 
                 const SizedBox(height: 8),
-                TextFormField(controller: _jobType, decoration: const InputDecoration(labelText: 'Job type - Fulltime/Part-time'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null),
+
+                DropdownButtonFormField<String>(
+                  value: _selectedJobType,
+                  borderRadius: BorderRadius.circular(20),
+                  dropdownColor: Colors.white,
+                  items: [null, ...commonJobTypes].map((p) {
+                    if (p == null) return const DropdownMenuItem<String>(value: null, child: Text('Select job type'),);
+                    return DropdownMenuItem<String>(value: p, child: Text(p),);
+                  }).toList(),
+                  onChanged: (v) => setState(() => _selectedJobType = v),
+                  decoration: const InputDecoration(),
+                ),
+
                 const SizedBox(height: 8),
                 TextFormField(controller: _vacancyCount, decoration: const InputDecoration(labelText: 'Vacancy count'), validator: (v) {
                   if (v == null || v.trim().isEmpty) return 'Required';

@@ -17,7 +17,9 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
-    Get.find<DashboardController>().getPosts();
+    WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timestamp){
+      Get.find<DashboardController>().getPosts();
+    });
     super.initState();
   }
 
