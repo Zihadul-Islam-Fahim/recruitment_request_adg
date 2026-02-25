@@ -28,36 +28,57 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Requests'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_box_outlined),
-            tooltip: 'New Request',
-            onPressed: () => Get.toNamed('/new_request'),
-          )
-        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: GetBuilder<DashboardController>(
-          builder: (ctl) {
-            if(ctl.inProgress==false){
-            final items = ctl.jobPostListModel?.jobPostList ?? [];
-            if (items.isEmpty) {
-              return Center(child: Text('No requests yet. Tap + to create one.'));
-            }
-            return ListView.separated(
-              itemCount: items.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
-              itemBuilder: (ctx, i) {
-                final r = items[i];
-                return _RequestListItem(request: r);
+
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: GetBuilder<DashboardController>(
+              builder: (ctl) {
+                if(ctl.inProgress==false){
+                final items = ctl.jobPostListModel?.jobPostList ?? [];
+                if (items.isEmpty) {
+                  return Center(child: Text('No requests yet. Tap + to create one.'));
+                }
+                return ListView.separated(
+                  itemCount: items.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  itemBuilder: (ctx, i) {
+                    final r = items[i];
+                    return _RequestListItem(request: r);
+                  },
+                );
+                }else{
+                  return Center(child: CircularProgressIndicator(),);
+                }
               },
-            );
-            }else{
-              return Center(child: CircularProgressIndicator(),);
-            }
-          },
-        ),
+            ),
+          ),
+          Positioned(bottom: 40,
+              right: 20,
+              child: MaterialButton(
+                onPressed: () => Get.toNamed('/new_request'),
+                height: 50,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                ),
+                minWidth: 160,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
+                child: Row(
+                  children: [
+                    Icon(Icons.add, color: Colors.white,),
+                    SizedBox(width: 5,),
+                    Text("New Request",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+          ),
+        ],
       ),
     );
   }
@@ -72,7 +93,7 @@ class _RequestListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final created = request.createdAt;
     return InkWell(
-      onTap: () => Get.toNamed('/detail/${request.id}'),
+      // onTap: () => Get.toNamed('/detail/${request.id}'),
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.all(12),
