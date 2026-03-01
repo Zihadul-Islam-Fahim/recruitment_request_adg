@@ -16,7 +16,7 @@ class SplashController extends GetxController {
     if(await AuthController().checkAuthState()){
       Get.offAllNamed('/dashboard');
     }else{
-      Get.offAllNamed('/login');
+      Get.offAllNamed('/onboarding');
     }
     // Navigate to dashboard
     
