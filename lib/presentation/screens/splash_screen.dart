@@ -61,7 +61,7 @@ class SplashScreen extends StatelessWidget {
                 const Text(
                   'Hiring made simple',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     color: Colors.white70,
                     letterSpacing: 0.5,
                   ),

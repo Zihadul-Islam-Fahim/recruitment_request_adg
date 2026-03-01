@@ -17,6 +17,7 @@ class ControllerBinder extends Bindings {
     Get.put(SignupController());
     Get.put(DashboardController());
     Get.put(RequestController());
+    Get.put(AuthController());
 
 
 

@@ -7,6 +7,7 @@ class Urls{
 
 
   static String user = "$_bseUrl/user";
+  static String deleteUser = "$_bseUrl/api/auth/delete/account";
 
 
   static String jobPost = "$_bseUrl/api/company/jobs";
